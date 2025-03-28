@@ -2,8 +2,8 @@
 # ППО идентификации стационарных режимов 
 
 [![GitHub Stars](https://img.shields.io/github/stars/Mart-igor/GUI_for_identifying_stationary_mode.svg)](https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/stargazers)
-[![GitHub commits](https://img.shields.io/github/commits-since/aregtech/areg-sdk/v1.0.0.svg?style=social)](https://GitHub.com/aregtech/areg-sdk/commit/)
-[![Watchers](https://img.shields.io/github/watchers/aregtech/areg-sdk?style=social)](https://github.com/aregtech/areg-sdk/watchers)
+[![GitHub release (latest by semver)](https://img.shields.io/github/v/release/Mart-igor/GUI_for_identifying_stationary_mode?color=60be86&label=Latest%20release&style=social&sort=semver)](https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/releases)
+[![Watchers](https://img.shields.io/github/watchers/Mart-igor/GUI_for_identifying_stationary_mode?style=social)](https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/watchers)
 
 
 *Автоматизация эффективна, так как она сокращает время выполнения задач, минимизирует ошибки и позволяет сосредоточиться на стратегически важных аспектах работы.*
@@ -17,51 +17,69 @@
 Данное ППО позволяет решить задачу автоматического поиска стационарных рабочих режимов.
 
 
-![Chat Preview](gif_and_screen\Clipchamp4-ezgif.com-video-to-gif-converter.gif)
+![Chat Preview](https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/db7d7474624a33ca4fcb5689b37bdfb9bfa90562/gif_and_screen/Clipchamp4-ezgif.com-video-to-gif-converter.gif)
 
 ---
 
 ## Table of content
- - [Tech Stack](#tech-stack)
- - [Demo](#demo)
- - [Documentation](#documentation)
- - [Usage](#usage)
- - [Deployment](#deployment)
- - [Feedback](#feedback)
+- [ППО идентификации стационарных режимов](#ппо-идентификации-стационарных-режимов)
+  - [Introduction](#introduction)
+  - [Table of content](#table-of-content)
+  - [Tech Stack](#tech-stack)
+  - [Demo](#demo)
+  - [Documentation](#documentation)
+  - [Usage](#usage)
+    - [Основные шаги для использования программы:](#основные-шаги-для-использования-программы)
+  - [Deployment](#deployment)
+  - [Feedback](#feedback)
 
 
-<a id="tech-stack"><h2>Tech Stack</h2></a>
+## Tech Stack
 
-**Client:** React, Redux, TailwindCSS
+- **Язык программирования**: Python 3.9+
+ 
+    **Принципы разработки**:
+  - Инкапсуляция, наследование, полиморфизм, композиция.
+  - SOLID, DRY, KISS.
+  
+  **Инструменты**:
+  - Типизация: `mypy`, аннотации.
 
-**Server:** Node, Express
-
-- **Язык программирования**: Python
 - **Графический интерфейс**: PySide6
-- **Многопоточность**: threading (стандартная библиотека Python)
-- **База данных**: SQLite (или укажите другую СУБД, если используется)
-- **Машинное обучение**: scikit-learn, pandas, numpy (или конкретные библиотеки, которые вы используете)
-- **Стилизация интерфейса**: CSS (встроенный в PySide6)
+- **Многопоточность**: threading 
+- **База данных**: SQLite 
+- **Машинное обучение**: scikit-learn, pandas, numpy 
+- **Стилизация интерфейса**: CSS
 - **Система контроля версий**: Git, GitHub
+- **Документациям модуля**: автоматическая генерация через `pdoc`.
 
 ## Demo
 
 Программа предоставляет удобный графический интерфейс для ввода данных и использует алгоритм оптимизации для их обработки.
+<p></p>
+Алгоритм оптимизации:
 
-![Демонстрация работы](screenshots/demo.gif)
+<div style="display: flex; gap: 10px;"> <img src="https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/main/gif_and_screen/image.png" width="300" /> <img src="https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/main/gif_and_screen/2.png" width="300" /><img src="https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/main/gif_and_screen/result.png" width="300" /> </div>
+<p></p>
+Отчет (выргузка результата работыт алгоритма):
 
-В разделе "Info" приведена инструкция по использованию.
+<div style="display: flex; gap: 10px;"> <img src="https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/main/gif_and_screen/report.png" width="300" /></div>
+<p></p>
+Страницы Help, Settings, About:
 
-![Демонстрация работы](screenshots/demo.gif)
+<div style="display: flex; gap: 10px;"> <img src="https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/main/gif_and_screen/help.png" width="300" /><img src="https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/main/gif_and_screen/settings.png" width="300" /><img src="https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/main/gif_and_screen/about.png" width="300" /></div>
 
+<p></p>
 
-## Documantation {#documentation}
+В разделе "[Usage](#usage)" приведена инструкция по использованию
+
+## Documentation
 
 Для более детального изучения алгоритма и его математического обоснования, вы можете ознакомиться с моей статьей по данной теме:  
-- [Документация и теоретические основы](https://linktodocumentation)
+- [Документация и теоретические основы]([https://linktodocumentation](https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/main/doc/article.pdf))
 
  
-## Usage {#usage}
+## Usage
 
 ### Основные шаги для использования программы:
 
@@ -95,24 +113,26 @@
      - Выгрузить размеченные данные в файл для дальнейшего использования.
 
 
-## Deployment {#deployment}
+## Deployment
 
-To deploy this project run
+После скачивания проекта (не EXE) выполните:
 
 ```bash
-  npm run deploy
+  pip install -r requirements.txt
+```
+Запустите:
+
+```bash
+  python main.py
+```
+Запуск для документации модуля:
+
+```bash
+  pdoc -p 8080 main.py
 ```
 
+Или скачайте установщик main.exe из папки dist
 
-## Feedback {#feedback}
+## Feedback
 
 Feel free to send us feedback on Twitter or file an issue. Feature requests are always welcome. If you wish to contribute, please take a quick look at the guidelines!
-
-## Show your support
-
-Please ⭐️ this repository if you find this project usefull!
-
-And you can support this project here --> 
-<a href="https://www.patreon.com/FranckAbgrall">
-  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
