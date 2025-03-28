@@ -1,0 +1,191 @@
+{
+    "Global": {
+        "*": {
+            "border": "none",
+            "background-color": "transparent",
+            "padding": "0",
+            "margin": "0",
+            "color": "#fff"
+        },
+        "QPushButton": {
+            "text-align": "left",
+            "padding": "3px 10px",
+            "border-radius": "10px"
+        }
+    },
+
+    "Widgets": {
+        "#centralwidget, #main_content": {
+            "background-color": "#1b1b27"
+        },
+        "#header, #main_body": {
+            "background-color": "#27263c"
+        },
+        "#pushButton": {
+            "border": "1px solid #cc5bce",
+            "border-radius": "16px",
+            "text-align": "center"
+        },
+        "#add_user_btn": {
+            "background-color": "#1b1b27",
+            "border-radius": "10px"
+        }
+    },
+
+    "NavigationButtons": {
+        "#home_btn, #reports_btn, #algorithm_btn, #instruction_btn, #account_btn": {
+            "border-left": "3px solid #cc5bce",
+            "font-weight": "bold"
+        }
+    },
+
+    "ContentAreas": {
+        "#main_content QPushButton, QStackedWidget QPushButton": {
+            "background-color": "#3a3854",
+            "color": "white",
+            "font-size": "9pt",
+            "font-family": "Arial",
+            "text-align": "center",
+            "border": "1px solid #4a4864",
+            "border-radius": "4px",
+            "padding": "5px"
+        },
+        "#main_content QPushButton:hover, QStackedWidget QPushButton:hover": {
+            "background-color": "#4a4864",
+            "color": "#a0a0a0",
+            "border": "1px solid #5a5874"
+        },
+        "#main_content QPushButton:pressed, QStackedWidget QPushButton:pressed": {
+            "background-color": "#2a2844",
+            "color": "#c0c0c0"
+        }
+    },
+
+    "InputFields": {
+        "QLineEdit, #main_content QLineEdit": {
+            "background-color": "#2a2a4c",
+            "color": "#ffffff",
+            "border": "1px solid #3a3a5c",
+            "padding": "5px 10px",
+            "border-radius": "5px"
+        },
+        "#main_content QLineEdit:focus": {
+            "border": "1px solid #4a4a6c"
+        }
+    },
+
+    "ComboBoxes": {
+        "QComboBox, #main_content QComboBox": {
+            "background-color": "#2a2a4c",
+            "color": "#ffffff",
+            "border": "1px solid #3a3a5c",
+            "padding": "5px"
+        },
+        "QComboBox QAbstractItemView": {
+            "background-color": "white",
+            "color": "black"
+        }
+    },
+
+    "Labels": {
+        "QStackedWidget QLabel, #main_content QLabel": {
+            "color": "white",
+            "font-family": "Arial",
+            "text-align": "center",
+            "background-color": "transparent",
+            "border": "1px dashed #4a4864",  
+            "border-radius": "4px",
+            "padding": "3px 8px",
+            "margin": "2px"
+        },
+        "#main_content QLabel:hover": {
+            "color": "#a0a0a0",
+            "border-color": "#5a5874"  
+        },
+        "SpecialLabels": {
+            "#label_4, #label_5, #language_lbl, #theme_lbl, #forn_lbl, #graphs_lbl, #export_lbl, #choose_alg_lbl": {
+                "font-size": "12pt",
+                "border": "1px solid #cc5bce",  
+                "background-color": "rgba(74, 72, 100, 0.2)" 
+            },
+            "#data_label, #label_11, #report_label, #label_25, #label_3": {
+                "font-size": "14pt",
+                "border": "1px solid #6a5bce",  
+                "border-radius": "6px",
+                "padding": "5px 10px"
+            }
+        }
+    },
+
+    "Tables": {
+        "QTableWidget": {
+            "background-color": "#1b1b27",
+            "border": "1px solid #3a3a5c",
+            "border-radius": "4px",
+            "gridline-color": "#3a3a5c",
+            "font-size": "14px"
+        },
+        "QHeaderView::section": {
+            "background-color": "#27263c",
+            "color": "#ffffff",
+            "padding": "8px",
+            "border": "none",
+            "border-bottom": "2px solid #3a3a5c",
+            "font-weight": "bold"
+        },
+        "QTableWidget::item": {
+            "color": "#ffffff",
+            "background-color": "#1b1b27",
+            "padding": "6px"
+        },
+        "QTableWidget::item:alternate": {
+            "background-color": "#252536"
+        },
+        "QTableWidget::item:selected, QTableWidget::item:hover": {
+            "background-color": "#3a3a5c"
+        },
+        "QScrollBar:vertical": {
+            "background": "#1b1b27",
+            "width": "12px"
+        },
+        "QScrollBar::handle:vertical": {
+            "background": "#3a3a5c",
+            "min-height": "20px",
+            "border-radius": "6px"
+        },
+        "QTableCornerButton::section": {
+            "background-color": "#27263c",
+            "border": "none",
+            "border-bottom": "2px solid #3a3a5c"
+        }
+    },
+
+    "ProgressBars": {
+        "#main_content QProgressBar": {
+            "background-color": "#1b1b27",
+            "border": "1px solid #3a3a5c"
+        },
+        "#main_content QProgressBar::chunk": {
+            "background-color": "#3a3a5c"
+        }
+    },
+
+    
+    "QPushButtonGroup": {
+        "Buttons": [
+            "home_btn",
+            "account_btn",
+            "reports_btn",
+            "about_btn",
+            "help_btn",
+            "settings_btn",
+            "algorithm_btn",
+            "instruction_btn"
+        ],
+        "Style": {
+            "Active": "background-color: #1b1b27; border-left: 3px solid #cc5bce; font-weight: bold;",
+            "NotActive": "background-color: transparent; border: none;"
+        }
+    }
+    
+}

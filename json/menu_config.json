@@ -1,0 +1,28 @@
+{
+"left_menu": [{
+    "name": "menu_widget",
+    "defaultSize": [{
+        "width": 250,
+        "height": "auto"
+    }],
+    "collapsedSize": [{
+        "width": 0,
+        "height": "auto"
+    }],
+    "expandedSize": [{
+        "width": 200,
+        "height": "auto"
+    }],
+    "toggleButton": [{
+        "buttonName": "menu_btn",
+        "icons": [{
+            "whenMenuIsCollapsed": "airplay.png",
+            "whenMenuIsExpanded": "align-center.png"
+        }]
+    }],
+    "menuTransitionAnimation": [{
+        "animationDuration": 1000,
+        "animationEasingCurve": "Linear"
+    }]
+}]  
+}
