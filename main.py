@@ -11,6 +11,9 @@ from PySide6.QtGui import (QIcon, QTextDocument, QTextCursor,
 import pandas as pd
 import numpy as np
 import matplotlib.dates as mdates
+from matplotlib.patches import Rectangle
+from sklearn.metrics import f1_score
+from scipy.optimize import minimize
 
 from ui.ui_station_interface import Ui_MainWindow
 from mplwidget import MplWidgetOptimize, MplWidget
@@ -77,6 +80,16 @@ class MainWindow(QMainWindow):
         self.ui.data_graph_btn.clicked.connect(self.plot_graph)
         self.ui.data_graph_btn.setEnabled(False)
         self.ui.next_page_1.clicked.connect(self.go_to_page_2)
+
+        self.ui.optimize.clicked.connect(self.calculate_stationary)
+        self.ui.next_page_1.clicked.connect(self.go_to_page_2)
+        self.ui.graph_opt.clicked.connect(self.plot_graph_optimize)
+        self.ui.add_stationar.clicked.connect(self.on_add_stationary_clicked)
+        self.ui.search_k.clicked.connect(self.ratio_calculation)
+        self.ui.graph_result.clicked.connect(self.plot_graph_result)
+
+        # Подключение событий мыши widget12
+        self.ui.widget_12.connect_events(self)
 
     def slide_left_menu(self):
         width = self.ui.left_menu.width()
@@ -211,8 +224,8 @@ class MainWindow(QMainWindow):
 
     def go_to_page_2(self):
         algorithm = self.ui.alg_box.currentText()
-        if algorithm == "Одномерные конрольные карты":
-            self.ui.stackedWidget.setCurrentIndex(2) 
+        # if algorithm == "Одномерные конрольные карты":
+        self.ui.stackedWidget.setCurrentIndex(2) 
 
     def display_table(self, data: pd.DataFrame, table_name) -> None:
         table_name.setRowCount(data.shape[0])
@@ -314,6 +327,175 @@ class MainWindow(QMainWindow):
             self.plot(self.ui.widget_4, self.df[x_column], self.df[y_column], f"{y_column} vs {x_column}", x_column, y_column)
         except Exception as e:
             print(f"Ошибка при построении графика: {e}")
+
+    def calculate_stationary(self):
+        try:
+            x_min = int(self.ui.x_min.text())
+            x_max = int(self.ui.x_max.text())
+
+            column_name = self.ui.box_y.currentText()
+
+            if column_name not in self.df.columns:
+                raise ValueError(f"Столбец '{column_name}' не найден в DataFrame")
+
+            data_PT = self.df[[column_name]]
+            range_max_min = x_max - x_min
+
+            indexes_v3 = [i for i in range(x_min, x_max, 1)]
+            self.data_v3 = data_PT.iloc[indexes_v3]
+
+            rr = self.algorith(self.data_v3, range_max_min)
+            self.data_graph = pd.concat([self.data_v3, rr], axis=1)
+            self.data_graph['assessment'] = 0
+            self.display_table(self.data_graph, self.ui.table_classification)            
+
+        except Exception as e:
+            print(f"Ошибка: {e}")
+
+    def plot_graph_optimize(self):
+        try:
+            table = self.ui.table_classification 
+            row_count = table.rowCount()
+            column_count = table.columnCount()
+
+            if row_count == 0 or column_count == 0:
+                print("Ошибка: таблица пуста.")
+                return
+            
+            y_data = []
+            for i in range(row_count):
+                item = table.item(i, 0) 
+                if item is not None:
+                    try:
+                        y_value = float(item.text()) 
+                        y_data.append(y_value)
+                    except ValueError:
+                        print(f"Ошибка: значение в строке {i} не является числом.")
+                        return
+                    
+            x_min = int(self.ui.x_min.text())
+            x_max = int(self.ui.x_max.text())
+
+            x_data = range(x_min, x_max)
+            self.plot(self.ui.widget_12, x_data, y_data, "График по первому столбцу", "Индекс строки", "Значение первого столбца")
+        except Exception as e:
+            print(f"Ошибка при построении графика: {e}")
+            
+    def on_press(self, event):
+        """Обработка нажатия мыши"""
+        if event.inaxes is not None:
+            self.selection_start = event.xdata 
+
+    def on_release(self, event):
+        """Обработка отпускания мыши"""
+        if event.inaxes is not None and self.selection_start is not None:
+            self.selection_end = event.xdata  
+
+            self.selected_regions.append((self.selection_start, self.selection_end))
+
+            self.highlight_selected_region(self.selection_start, self.selection_end)
+
+            self.selection_start = None
+            self.selection_end = None
+
+    def highlight_selected_region(self, start, end):
+        """Перекрашивание выделенного участка на графике"""
+        ax = self.ui.widget_12.figure.axes[0]
+        height = ax.get_ylim()[1] - ax.get_ylim()[0] 
+        rect = Rectangle((start, ax.get_ylim()[0]), end - start, height,
+                         color='yellow', alpha=0.3)
+        ax.add_patch(rect)
+        self.ui.widget_12.canvas.draw()
+        
+    def on_add_stationary_clicked(self):
+        """Обработка нажатия кнопки 'add_stationary'"""
+        for start, end in self.selected_regions:
+            start_index = int(np.floor(start))
+            end_index = int(np.ceil(end))
+
+            start_index = max(0, min(start_index, len(self.df) - 1))
+            end_index = max(0, min(end_index, len(self.df) - 1))
+
+            self.data_graph.loc[start_index:end_index, 'assessment'] = 1
+
+        self.display_table(self.data_graph, self.ui.table_classification)
+
+        self.y_true = np.array(self.data_graph['assessment'].iloc[51:])
+
+        self.selected_regions.clear()
+
+        self.clear_highlights()
+
+    def clear_highlights(self):
+        """Очистка всех выделений на графике"""
+        ax = self.ui.widget_12.figure.axes[0]
+        for patch in ax.patches:
+            patch.remove()
+        self.ui.widget_12.canvas.draw()
+
+    def search_ratio(self, x):
+        x_min = int(self.ui.x_min.text())
+        x_max = int(self.ui.x_max.text())
+        x_range = x_max - x_min
+
+        rr = self.algorith(self.data_v3, x_range, x)
+        score = f1_score(self.y_true, rr['stationary'], average='binary')
+
+        return -score
+
+    def ratio_calculation(self):
+        x0 = [0.5, 0.5, 0.5]
+        bnds = ((0, 1), (0, 1), (0, 1))
+
+        def callback(xk, *args, **kwargs):
+            print(f'current ratio: {xk}')
+
+        result = minimize(self.search_ratio, x0, method="Powell", bounds=bnds, callback=callback)
+        self.all_ratios = result.x
+        self.essential_f = result.fun
+        self.ui.k_1.setText(f"K_1: {round(self.all_ratios[0], 4)}")
+        self.ui.k_2.setText(f"K_2: {round(self.all_ratios[1], 4)}")
+        self.ui.k_3.setText(f"K_3: {round(self.all_ratios[2], 4)}")
+        self.ui.F_score.setText(f"F_score: {abs(round(self.essential_f, 4))}")
+
+    def plot_graph_result(self):
+        column_name = self.ui.box_y.currentText()
+        x_min = 0
+        x_max = len(self.df)
+        range_max_min = x_max - x_min
+
+        rr = self.algorith(self.df[[column_name]], range_max_min, self.all_ratios)
+        self.table_result = pd.concat([self.df, rr], axis=1)
+
+        if 'time' not in self.table_result.columns:
+            print("Столбец 'time' не найден в данных")
+            return
+
+        self.ui.widget_12.figure.clear()
+
+        ax = self.ui.widget_12.figure.add_subplot(111)
+
+        ax.plot(self.table_result['time'], 
+            self.table_result[column_name], 
+            'g-', alpha=0.5, label=column_name)
+
+        non_stationary_data = self.table_result[self.table_result['stationary'] == 0]
+        ax.plot(non_stationary_data['time'], 
+                non_stationary_data[column_name], 
+                'bo', markersize=2, label='Нестационарные точки')
+
+        stationary_data = self.table_result[self.table_result['stationary'] == 1]
+        ax.plot(stationary_data['time'], 
+                stationary_data[column_name], 
+                'r*', markersize=2, label='Стационарные точки')
+
+        ax.set_xlabel('Время')
+        ax.set_ylabel("Значение")
+        ax.legend()
+        ax.grid(True)
+
+        self.ui.widget_12.canvas.draw()
+        self.display_table(self.table_result, self.ui.report_table)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
