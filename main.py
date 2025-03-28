@@ -7,6 +7,7 @@ from PySide6.QtCore import QPropertyAnimation, Qt, QSize, QEasingCurve
 from PySide6.QtGui import (QIcon, QTextDocument, QTextCursor, 
                           QTextTableFormat, QTextCharFormat, 
                           QTextFrameFormat, QPixmap)
+from PySide6.QtPrintSupport import QPrinter
 
 import pandas as pd
 import numpy as np
@@ -17,6 +18,7 @@ from scipy.optimize import minimize
 
 from ui.ui_station_interface import Ui_MainWindow
 from mplwidget import MplWidgetOptimize, MplWidget
+from report import ReportPrinter
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -87,6 +89,14 @@ class MainWindow(QMainWindow):
         self.ui.add_stationar.clicked.connect(self.on_add_stationary_clicked)
         self.ui.search_k.clicked.connect(self.ratio_calculation)
         self.ui.graph_result.clicked.connect(self.plot_graph_result)
+
+        # печать
+        self.printer = ReportPrinter(self)
+        self.ui.print_btn.clicked.connect(self.on_print)
+        self.ui.export_pdf_btn.clicked.connect(self.export_to_pdf)
+        self.ui.export_csv_btn.clicked.connect(self.export_to_csv)
+        self.ui.export_json_btn.clicked.connect(self.export_to_json)
+        self.ui.pushButton_4.clicked.connect(self.export_to_excel)
 
         # Подключение событий мыши widget12
         self.ui.widget_12.connect_events(self)
@@ -496,6 +506,105 @@ class MainWindow(QMainWindow):
 
         self.ui.widget_12.canvas.draw()
         self.display_table(self.table_result, self.ui.report_table)
+
+    def on_print(self):
+        if hasattr(self, 'table_result'):
+            self.printer.print_data(self.table_result, "DataFrame Report")
+
+    def export_to_pdf(self):
+        filename, _ = QFileDialog.getSaveFileName(
+            self, "Сохранить PDF", "", "PDF Files (*.pdf)")
+        
+        if filename:
+            try:
+                printer = QPrinter(QPrinter.HighResolution)
+                printer.setOutputFormat(QPrinter.PdfFormat)
+                printer.setOutputFileName(filename)
+                
+                doc = QTextDocument()
+                cursor = QTextCursor(doc)
+                
+                title_format = QTextCharFormat()
+                title_format.setFontPointSize(14)
+                title_format.setFontWeight(75)
+                cursor.insertText("Отчет\n", title_format)
+                
+                table_format = QTextTableFormat()
+                table_format.setAlignment(Qt.AlignHCenter)
+                table_format.setBorderStyle(QTextFrameFormat.BorderStyle_Solid)
+                
+                table = cursor.insertTable(
+                    self.table_result.shape[0] + 1, 
+                    self.table_result.shape[1], 
+                    table_format
+                )
+                
+                for col in range(self.table_result.shape[1]):
+                    cursor.insertText(self.table_result.columns[col])
+                    cursor.movePosition(QTextCursor.NextCell)
+                
+                for row in range(self.table_result.shape[0]):
+                    for col in range(self.table_result.shape[1]):
+                        cursor.insertText(str(self.table_result.iloc[row, col]))
+                        cursor.movePosition(QTextCursor.NextCell)
+                
+                doc.print_(printer)
+                QMessageBox.information(self, "Успех", "PDF успешно сохранен!")
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка", f"Ошибка: {str(e)}")
+  
+    def export_to_csv(self):
+        filename, _ = QFileDialog.getSaveFileName(
+            self, "Сохранить CSV", "", "CSV Files (*.csv)")
+        
+        if filename:
+            try:
+                self.table_result.to_csv(filename, index=False, encoding='utf-8-sig', sep=';')
+                QMessageBox.information(self, "Успех", "CSV успешно сохранен!")
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка", f"Ошибка: {str(e)}")
+    
+    def export_to_json(self):
+        filename, _ = QFileDialog.getSaveFileName(
+            self, "Сохранить JSON", "", "JSON Files (*.json)")
+        
+        if filename:
+            try:
+                data_dict = self.table_result.to_dict(orient='records')
+                
+                with open(filename, 'w', encoding='utf-8') as f:
+                    json.dump(data_dict, f, ensure_ascii=False, indent=4)
+                
+                QMessageBox.information(self, "Успех", "JSON успешно сохранен!")
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка", f"Ошибка: {str(e)}")
+    
+    def export_to_excel(self):
+        try:
+            import openpyxl  
+        except ImportError:
+            QMessageBox.critical(
+                self, 
+                "Ошибка", 
+                "Для экспорта в Excel требуется модуль openpyxl.\n"
+                "Установите его командой: pip install openpyxl"
+            )
+            return
+        
+        filename, _ = QFileDialog.getSaveFileName(
+            self, "Сохранить Excel", "", "Excel Files (*.xlsx)")
+        
+        if filename:
+            try:
+                if not filename.endswith('.xlsx'):
+                    filename += '.xlsx'
+                
+                with pd.ExcelWriter(filename, engine='openpyxl') as writer:
+                    self.table_result.to_excel(writer, index=False, sheet_name='Данные')
+                
+                QMessageBox.information(self, "Успех", "Excel файл успешно сохранен!")
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка", f"Ошибка: {str(e)}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
