@@ -76,7 +76,7 @@
 ## Documentation
 
 Для более детального изучения алгоритма и его математического обоснования, вы можете ознакомиться с моей статьей по данной теме:  
-- [Документация и теоретические основы]([https://linktodocumentation](https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/main/doc/article.pdf))
+- [Документация и теоретические основы](https://github.com/Mart-igor/GUI_for_identifying_stationary_mode/blob/a8650a1bbe0ea7a6d1c945c2c52a53df87b533d8/doc/article.pdf)
 
  
 ## Usage
