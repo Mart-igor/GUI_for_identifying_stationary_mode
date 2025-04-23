@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'stationpMuBFt.ui'
+## Form generated from reading UI file 'stationxLxohx.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -563,6 +563,11 @@ class Ui_MainWindow(object):
         self.progressBar.setValue(0)
 
         self.verticalLayout_15.addWidget(self.progressBar)
+
+        self.correlation_btn = QPushButton(self.frame_10)
+        self.correlation_btn.setObjectName(u"correlation_btn")
+
+        self.verticalLayout_15.addWidget(self.correlation_btn)
 
 
         self.horizontalLayout_6.addWidget(self.frame_10)
@@ -1894,7 +1899,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -1944,6 +1949,7 @@ class Ui_MainWindow(object):
         self.data_label.setText(QCoreApplication.translate("MainWindow", u"\u0418\u0441\u0445\u043e\u0434\u043d\u044b\u0435 \u0434\u0430\u043d\u043d\u044b\u0435", None))
         self.load_btn.setText(QCoreApplication.translate("MainWindow", u"Pick File", None))
         self.name_file_label.setText("")
+        self.correlation_btn.setText(QCoreApplication.translate("MainWindow", u"correlation", None))
         self.box_x.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u041e\u0441\u044c X", None))
         self.box_y.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u041e\u0441\u044c Y", None))
         self.data_graph_btn.setText(QCoreApplication.translate("MainWindow", u"\u041f\u043e\u0441\u0442\u0440\u043e\u0438\u0442\u044c \u0433\u0440\u0430\u0444\u0438\u043a", None))
